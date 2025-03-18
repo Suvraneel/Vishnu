@@ -54,3 +54,6 @@ jobs:
         IMAGE_TAG=suvraneel/vishnu:latest
         docker build . --file Dockerfile --tag $IMAGE_TAG
         docker push $IMAGE_TAG
+
+    - name: Deploy to Render
+      run: curl -X GET ${{ secrets.RENDER_DEPLOY_HOOK }}

@@ -1,6 +1,7 @@
 package ai.vision.vishnu.entity;
 
 import ai.vision.vishnu.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Log4j2
 @Data
@@ -24,9 +24,9 @@ public class User implements UserDetails {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", length = 50, nullable = true)
-    private String name;
-    @Column(name = "email", nullable = false)
+    @Column(name = "username", length = 50, nullable = true)
+    private String username;
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "role_id", nullable = false)
     @Enumerated(EnumType.ORDINAL)
@@ -41,8 +41,12 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
-    @Column(name = "picture", nullable = true)
+    @Column(name = "picture")
     private String picture;
+
+    @JsonIgnore
+    @Column(name = "passwordHash", nullable = false)
+    private String passwordHash;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,12 +55,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "root";
-    }
-
-    @Override
-    public String getUsername() {
-        return email.split("@")[0];
+        return "Sike! you thought";
     }
 
     @Override

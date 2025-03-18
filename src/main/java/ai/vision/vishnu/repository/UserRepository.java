@@ -5,13 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
-
     @NativeQuery("SELECT * FROM users WHERE id = :id and is_active = true")
     User findUserById(Long id);
 
-    @NativeQuery("SELECT * FROM users WHERE name = :name and is_active = true")
-    User findUserByName(String name);
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findByEmail(String email);
 }

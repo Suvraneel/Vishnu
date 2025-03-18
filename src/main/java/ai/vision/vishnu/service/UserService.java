@@ -2,11 +2,17 @@ package ai.vision.vishnu.service;
 
 import ai.vision.vishnu.entity.User;
 import ai.vision.vishnu.model.UserBean;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.apache.coyote.BadRequestException;
 
 public interface UserService {
-    User createUser(UserBean userBean);
 
-    User registerUser(@AuthenticationPrincipal OidcUser oidcUser);
+//    User registerUser(@AuthenticationPrincipal OidcUser oidcUser);
+
+    User getUser(String email);
+
+    User getUser(Long uid);
+
+    boolean authenticateUser(String email, String username, String password);
+
+    User createUser(UserBean userBean) throws BadRequestException;
 }

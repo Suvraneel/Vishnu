@@ -1,38 +1,41 @@
 package ai.vision.vishnu.controller.impl;
 
 import ai.vision.vishnu.controller.UserREST;
-import ai.vision.vishnu.entity.User;
 import ai.vision.vishnu.model.UserBean;
 import ai.vision.vishnu.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
-@Controller
+@RestController
 public class UserRESTImpl implements UserREST {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
+    @GetMapping("/user/{id}")
     @Override
-    public ResponseEntity<User> register(@RequestBody UserBean userBean) {
-        log.info("Registering user: {}", userBean);
-        return ResponseEntity.ok(userService.createUser(userBean));
+    public ResponseEntity<UserBean> getUser(@PathVariable Long uid) {
+        return ResponseEntity.ok(UserBean.from(userService.getUser(uid)));
     }
 
-    @GetMapping("/")
-    public String home(Model model, @AuthenticationPrincipal OidcUser principal) {
-        if (principal != null) {
-            model.addAttribute("profile", principal.getClaims());
-        }
-        return "index";
+    @GetMapping("/user/{email}")
+    @Override
+    public ResponseEntity<UserBean> getUser(@PathVariable String email) {
+        return ResponseEntity.ok(UserBean.from(userService.getUser(email)));
     }
+
+//
+//    @GetMapping("/")
+//    public String home(Model model, @AuthenticationPrincipal OidcUser principal) {
+//        if (principal != null) {
+//            model.addAttribute("profile", principal.getClaims());
+//        }
+//        return "index";
+//    }
+
+
 }
